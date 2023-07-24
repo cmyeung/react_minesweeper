@@ -1,0 +1,9 @@
+p {
+  margin: 0rem;
+}
+
+.board {
+  display: inline-block;
+  border: 1rem solid #c8c8c8;
+  padding: 0rem;
+}

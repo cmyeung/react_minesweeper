@@ -1,0 +1,65 @@
+.box {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.05rem;
+  border-top: 0;
+  border-left: 0;
+  border-bottom: solid 0.1rem #a9a9a9;
+  border-right: solid 0.1rem #a9a9a9;
+  background-color: #e3e3e3;
+  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+}
+
+.open {
+  border-top: solid 0.1rem #c8c8c8;
+  border-left: solid 0.1rem #c8c8c8;
+  border-bottom: 0;
+  border-right: 0;
+  background-color: #f0f0f0;
+}
+
+.flag {
+  background-image: url(/public/flag.png);
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bomb {
+  background-image: url(/public/bomb.png);
+  background-size: 80%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.text-blue {
+  color: blue;
+}
+
+.text-green {
+  color: green;
+}
+
+.text-cyan {
+  color: darkcyan;
+}
+
+.text-purple {
+  color: purple;
+}
+
+.text-brown {
+  color: brown;
+}
+
+.text-red {
+  color: firebrick;
+}
+
+.text-orange {
+  color: brown;
+}
+
+.text-magenta {
+  color: magenta;
+}

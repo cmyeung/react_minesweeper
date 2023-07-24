@@ -12,10 +12,9 @@ function App() {
   const [timeCount, setTimeCount] = useState(0);
   const [flagCount, setFlagCount] = useState(GameConfig.flag);
   const [board, setBoard] = useState(
-    Array(GameConfig.width)
+    Array(GameConfig.height)
       .fill()
-      .map((_) => Array(GameConfig.height))
-      .fill(null)
+      .map((_) => Array(GameConfig.width).fill(1))
   );
 
   // Timer of the Game, start count when the game has started
@@ -29,7 +28,7 @@ function App() {
     <div className="App">
       <FlagBoard flagCount={flagCount} />
       <TimeBoard timeCount={timeCount} />
-      <Board />
+      <Board board={board} />
     </div>
   );
 }
