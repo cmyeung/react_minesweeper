@@ -1,18 +1,20 @@
 .box {
   width: 23px;
   height: 23px;
+  padding: 0px;
   margin: 1px;
   border-top: 0;
   border-left: 0;
-  border-bottom: solid 2px #a9a9a9;
-  border-right: solid 2px #a9a9a9;
+  border-bottom: solid 1px #a9a9a9;
+  border-right: solid 1px #a9a9a9;
   background-color: #e3e3e3;
+  vertical-align: middle;
   font-family: "ZCOOL QingKe HuangYou", sans-serif;
 }
 
 .open {
-  border-top: solid 2px #c8c8c8;
-  border-left: solid 2px #c8c8c8;
+  border-top: solid 1px #c8c8c8;
+  border-left: solid 1px #c8c8c8;
   border-bottom: 0;
   border-right: 0;
   background-color: #f0f0f0;
