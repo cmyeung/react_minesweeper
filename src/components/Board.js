@@ -8,8 +8,8 @@ export const Board = ({ board }) => {
       {board.map((items, rowIdx) => {
         return (
           <p>
-            {items.map((value, colIdx) => {
-              return <Box value={value} />;
+            {items.map((state, colIdx) => {
+              return <Box state={state} />;
             })}
           </p>
         );

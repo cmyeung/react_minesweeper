@@ -1,0 +1,24 @@
+.resetButton {
+  width: 45px;
+  height: 45px;
+}
+
+.playing {
+  background-image: url(/public/gameStatus/playing.jpeg);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.win {
+  background-image: url(/public/gameStatus/win.jpeg);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.lose {
+  background-image: url(/public/gameStatus/lose.jpeg);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
