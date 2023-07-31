@@ -21,17 +21,20 @@ function App() {
     lose: 3,
   };
 
-  // const BoardSize = [24, 20, 99]; // Hard
   const GameConfig = {
     width: 18,
     height: 14,
     flag: 40,
   }; // Medium
+  // const BoardSize = [24, 20, 99]; // Hard
   // const BoardSize = [10, 8, 10];  // Easy
 
-  const [gameStatus, setGameStatus] = useState(0);
+  // States in the Games
+  const [gameStatus, setGameStatus] = useState(GameStatus.wait);
   const [timeCount, setTimeCount] = useState(0);
   const [flagCount, setFlagCount] = useState(GameConfig.flag);
+  const [openLocation, setOpenLocation] = useState({ rowIdx: -1, colIdx: -1 });
+  const [cntCheckWinning, setCntCheckWinning] = useState(0);
   const [board, setBoard] = useState(
     Array(GameConfig.height)
       .fill()
@@ -49,6 +52,14 @@ function App() {
         .fill()
         .map((_) => Array(GameConfig.width).fill(-1))
     );
+    setBombs(
+      Array(GameConfig.height)
+        .fill()
+        .map((_) => Array(GameConfig.width).fill(0))
+    );
+    setOpenLocation({ rowIdx: -1, colIdx: -1 });
+    setCntCheckWinning(0);
+    setTimeCount(0);
   };
 
   const assignBombs = (rowIdx, colIdx) => {
@@ -111,6 +122,11 @@ function App() {
     }
   };
 
+  // Call openGameBox in the next render cycle
+  useEffect(() => {
+    checkWining();
+  }, [cntCheckWinning]);
+
   const showAllBombs = () => {
     for (let i = 0; i < GameConfig.height; ++i) {
       for (let j = 0; j < GameConfig.width; ++j) {
@@ -129,8 +145,21 @@ function App() {
     );
   };
 
-  const openGameBox = (rowIdx, colIdx) => {
+  const openGameBox = (gameBoard, rowIdx, colIdx) => {
+    // Skip to process
+    if (rowIdx < 0 || rowIdx >= GameConfig.width) {
+      return;
+    }
+    if (colIdx < 0 || colIdx >= GameConfig.height) {
+      return;
+    }
+    if (gameBoard[colIdx][rowIdx] !== -1) {
+      return;
+    }
+
+    // Count number of Bombs
     let cnt = 0;
+
     for (let i = rowIdx - 1; i <= rowIdx + 1; ++i) {
       for (let j = colIdx - 1; j <= colIdx + 1; ++j) {
         if (0 <= i && i < GameConfig.width && 0 <= j && j < GameConfig.height) {
@@ -141,27 +170,25 @@ function App() {
       }
     }
 
-    console.log("cnt = ", cnt);
-    updateBoard(rowIdx, colIdx, cnt);
+    gameBoard[colIdx][rowIdx] = cnt;
 
     // Open adjacent boxes
-    // if (cnt === 0) {
-    //   for (let i = rowIdx - 1; i <= rowIdx + 1; ++i) {
-    //     for (let j = colIdx - 1; j <= colIdx + 1; ++j) {
-    //       if (
-    //         0 <= i &&
-    //         i < GameConfig.width &&
-    //         0 <= j &&
-    //         j < GameConfig.height
-    //       ) {
-    //         if (board[j][i] === -1) {
-    //           openGameBox(i, j);
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
+    if (cnt === 0) {
+      for (let i = rowIdx - 1; i <= rowIdx + 1; ++i) {
+        for (let j = colIdx - 1; j <= colIdx + 1; ++j) {
+          openGameBox(gameBoard, i, j);
+        }
+      }
+    }
   };
+
+  // Call openGameBox in the next render cycle
+  useEffect(() => {
+    const updBoard = board.map((row) => [...row]);
+    openGameBox(updBoard, openLocation.rowIdx, openLocation.colIdx);
+    setBoard(updBoard);
+    setCntCheckWinning(cntCheckWinning + 1);
+  }, [openLocation]);
 
   const handleBoardClickLeft = (rowIdx, colIdx) => {
     // if the game has not started, generate the bombs to the board
@@ -174,7 +201,7 @@ function App() {
       setGameStatus(GameStatus.lose);
       showAllBombs();
     } else {
-      openGameBox(rowIdx, colIdx);
+      setOpenLocation({ rowIdx: rowIdx, colIdx: colIdx });
     }
   };
 
@@ -183,6 +210,7 @@ function App() {
     if (flagCount > 0 && board[colIdx][rowIdx] === -1) {
       updateBoard(rowIdx, colIdx, -2);
       setFlagCount(flagCount - 1);
+      setCntCheckWinning(cntCheckWinning + 1);
     } else if (board[colIdx][rowIdx] === -2) {
       updateBoard(rowIdx, colIdx, -1);
       setFlagCount(flagCount + 1);
@@ -226,16 +254,10 @@ function App() {
         break;
     }
 
-    checkWining();
-
-    console.log(
-      "Event: ",
-      action,
-      " Row Index: ",
-      rowIdx,
-      ", Col Index: ",
-      colIdx
-    );
+    // Logging of mouse actions
+    const logstr =
+      action + " - Row Index: " + rowIdx + ", Col Index: " + colIdx;
+    console.log(logstr);
   };
 
   const handleResetClick = () => {
@@ -243,15 +265,22 @@ function App() {
     if (gameStatus === GameStatus.win || gameStatus === GameStatus.lose) {
       setGameStatus(GameStatus.wait);
       createBoard();
+      setFlagCount(GameConfig.flag);
     }
   };
 
   // Timer of the Game, start count when the game has started
   useEffect(() => {
-    setTimeout(() => {
-      setTimeCount((timeCount) => timeCount + 1);
-    }, 1000);
-  });
+    let timerId;
+    if (gameStatus === GameStatus.playing) {
+      timerId = setInterval(() => {
+        setTimeCount((timeCount) => timeCount + 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timerId);
+    };
+  }, [gameStatus]);
 
   return (
     <div

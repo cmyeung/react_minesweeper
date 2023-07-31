@@ -5,6 +5,8 @@ export const ResetBoard = ({ gameStatus, onClick }) => {
   let style;
   switch (gameStatus) {
     case 0:
+      style = "waiting";
+      break;
     case 1:
       style = "playing";
       break;

@@ -3,6 +3,13 @@
   height: 45px;
 }
 
+.waiting {
+  background-image: url(/public/gameStatus/waiting.png);
+  background-size: 90%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .playing {
   background-image: url(/public/gameStatus/playing.jpeg);
   background-size: 90%;
