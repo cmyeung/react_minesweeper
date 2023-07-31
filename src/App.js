@@ -221,15 +221,6 @@ function App() {
     const xPos = e.pageX;
     const yPos = e.pageY;
 
-    console.log(
-      "ClientX = ",
-      e.clientX,
-      ", PageX = ",
-      e.pageX,
-      ", ScrollX = ",
-      window.scrollX
-    );
-
     // The click is out of range of the board component
     if (
       xPos < GameConst.offsetX ||
